@@ -1,7 +1,6 @@
 import requests
 import time
 
-STATS_URL = "https://api.github.com/repos/{username}/{project}/stats/contributors"
 STARS_SEARCH_URL = "https://api.github.com/search/repositories?q=stars:>={min_stars}&sort=stars"
 
 STARS_FILENAME = "most_starred_{page}.json"
