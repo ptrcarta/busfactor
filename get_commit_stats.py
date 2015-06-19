@@ -11,19 +11,19 @@ search_files = list(zip(*sorted(map(lambda x: (int(x.split('_')[-1].split('.')[0
 
 repos = list()
 for sf in search_files:
-    with open(sf) as f:
+    with open('popular_repos/'+sf) as f:
         search_res = json.load(f)
         for r in search_res['items']:
-            repos.append((r['fullname'], r['stargazers_count']))
+            repos.append((r['full_name'], r['stargazers_count']))
 
 for repo in repos:
-    r = requests.get(STATS_URL.format(repo[0]))
+    r = requests.get(STATS_URL.format(fullname=repo[0]))
     if r.status_code == 202:
         time.sleep(0.5)
-    r = requests.get(STATS_URL.format(repo[0]))
+        r = requests.get(STATS_URL.format(fullname=repo[0]))
     if r.status_code == 200:
         print(repo[0])
-        with open(repo[0].replace('/','?'), 'w') as f:
+        with open("repos_stats/"+repo[0].replace('/','?'), 'w') as f:
             f.write(r.text)
         time.sleep(6)
     else:
