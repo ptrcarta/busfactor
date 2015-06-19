@@ -15,7 +15,7 @@ for sf in search_files:
         for r in search_res['items']:
             repos.append((r['fullname'], r['stargazers_count']))
 
-for repo in repos
+for repo in repos:
     r = requests.get(STATS_URL.format(repo[0]))
     if r.status_code == 202:
         time.sleep(0.5)
