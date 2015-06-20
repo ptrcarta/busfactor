@@ -80,7 +80,7 @@ def parse_stats():
     stats_files = os.listdir(STATS_DIR)
     projects = dict()
     for s in stats_files:
-        with open(s) as f:
+        with open(STATS_DIR+s) as f:
             stats = json.load(f)
             contributions = dict((cont['login'], cont['contributions']) for cont in stats)
             projects[s.replace('?','/')] = contributions
