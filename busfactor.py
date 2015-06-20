@@ -1,7 +1,9 @@
 STARS_SEARCH_URL = "https://api.github.com/search/repositories?q=stars:>={min_stars}&sort=stars"
 STATS_URL = "https://api.github.com/repos/{fullname}/contributors"
+LW_STATS_URL = "https://api.github.com/repos/{fullname}/stats/contributors"
 
 STARS_DIR = 'popular_repos/'
+LW_STARS_DIR = 'linewise/'
 STARS_FILENAME = "most_starred_{page}.json"
 
 STATS_DIR = "repos_stats/"
@@ -16,6 +18,54 @@ import requests
 
 def get_request(url):
     return requests.get(url, auth=(config.github_username, config.github_password))
+
+def download_contributors_stats(repo):
+    r = get_request(STATS_URL.format(fullname=repo))
+    while r.status_code == 202:
+        time.sleep(1)
+        r = get_request(STATS_URL.format(fullname=repo))
+    if r.status_code == 200:
+        print(repo)
+        with open(STATS_DIR+repo.replace('/','?'), 'w') as f:
+            f.write(r.text)
+        if 'links' in r.headers:
+            print("skipping next page at", r.links['next']['url'])
+    elif r.status_code == 403:
+        reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
+        now = datetime.now()
+        wait_delay = (reset_time - now).total_seconds()
+        print("sleep", wait_delay)
+        time.sleep(wait_delay)
+    else:
+        print(STATS_URL.format(fullname=repo))
+        print(r.status_code)
+        print(r.content)
+    time.sleep(1)
+    return r.status_code
+
+def download_linewise_stats(repo):
+    r = get_request(LW_STATS_URL.format(fullname=repo))
+    while r.status_code == 202:
+        time.sleep(1)
+        r = get_request(LW_STATS_URL.format(fullname=repo))
+    if r.status_code == 200:
+        print(repo)
+        with open(STATS_DIR+LW_STATS_DIR+repo.replace('/','?'), 'w') as f:
+            f.write(r.text)
+        if 'links' in r.headers:
+            print("skipping next page at", r.links['next']['url'])
+    elif r.status_code == 403:
+        reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
+        now = datetime.now()
+        wait_delay = (reset_time - now).total_seconds()
+        print("sleep", wait_delay)
+        time.sleep(wait_delay)
+    else:
+        print(STATS_URL.format(fullname=repo))
+        print(r.status_code)
+        print(r.content)
+    time.sleep(1)
+    return r.status_code
 
 def get_repos_list(min_stars=1000):
     request_url = STARS_SEARCH_URL.format(min_stars=min_stars)
@@ -49,32 +99,16 @@ def get_repos_stats():
                 repos.add(r['full_name'])
 
     done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STATS_DIR)))
+    lw_done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STATS_DIR+LW_STATS_DIR)))
 
     print("total", len(repos))
     print("done", len(done_repos))
 
     for repo in repos - done_repos:
+        download_contributors_stats(repo)
 
-        r = get_request(STATS_URL.format(fullname=repo))
-        while r.status_code == 202:
-            time.sleep(1)
-            r = get_request(STATS_URL.format(fullname=repo))
-
-        if r.status_code == 200:
-            print(repo)
-            with open(STATS_DIR+repo.replace('/','?'), 'w') as f:
-                f.write(r.text)
-        elif r.status_code == 403:
-            reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
-            now = datetime.now()
-            wait_delay = (reset_time - now).total_seconds()
-            print("sleep", wait_delay)
-            time.sleep(wait_delay)
-        else:
-            print(STATS_URL.format(fullname=repo))
-            print(r.status_code)
-            print(r.content)
-        time.sleep(1)
+    for repo in repos - lw_done_repos:
+        download_linewise_stats(repo)
 
 def parse_stats():
     stats_files = os.listdir(STATS_DIR)
@@ -87,4 +121,4 @@ def parse_stats():
     with open('aggregated_stats.json', 'w') as f:
         json.dump(projects, f, indent=2)
 
-if __name__ == '__main__': parse_stats()
+if __name__ == '__main__': get_repos_stats()
