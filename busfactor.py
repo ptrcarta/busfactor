@@ -66,4 +66,12 @@ def get_stats_dataframes()
         projects[s['project']] = pd.Dataframe(s['contributors'])
     return projects
 
-if __name__ == '__main__': parse_stats()
+if __name__ == '__main__':
+    params = (0.05,0.05,0.5)
+    df_dict = get_stats_dataframes()
+    filtered_projects = dict()
+    for proj in df_dict:
+        df = df_dict[proj].set_index('author', inplace=True).reindex_axis(['c','a','d'], axis=1)
+        contribution_ratio = df/df.sum()
+        main_contributors = contribution_ratio.select(lambda l: (contribution_ratiocontribution_ratio.loc[l] > params).any())
+        filtered_projects[proj] = main_contributors
