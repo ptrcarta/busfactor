@@ -48,21 +48,20 @@ def get_repos_stats():
             for r in search_res['items']:
                 repos.add(r['full_name'])
 
-    done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STAT_DIRS)))
+    done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STATS_DIR)))
 
     print("total", len(repos))
     print("done", len(done_repos))
 
     for repo in repos - done_repos:
-        print(repos)
-        break
+
         r = get_request(STATS_URL.format(fullname=repo))
         while r.status_code == 202:
             time.sleep(1)
             r = get_request(STATS_URL.format(fullname=repo))
 
         if r.status_code == 200:
-            print(repo[0])
+            print(repo)
             with open(STATS_DIR+repo.replace('/','?'), 'w') as f:
                 f.write(r.text)
         elif r.status_code == 403:
