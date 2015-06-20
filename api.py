@@ -23,7 +23,6 @@ def _get(url, items_q, list_node=None):
             items_q.extend(r.json[list_node])
         else:
             items_q.extend(r.json)
-        else:
         time.sleep(1)
         if 'links' in r.headers:
             if 'next' in r.links:
