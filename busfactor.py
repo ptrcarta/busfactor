@@ -33,12 +33,25 @@ def load_stats_files(repo):
 
 
 def parse_stats():
-    stats_files = os.listdir(STATS_DIR)
-    projects = dict()
+    stats_files = os.listdir(STATS_DIR+LW_STATS_DIR)
+    projects = []
     for s in stats_files:
-        with open(STATS_DIR+s) as f:
+        proj = []
+        with open(STATS_DIR+LW_STATS_DIR+s) as f:
             stats = json.load(f)
-            contributions = dict((cont['login'], cont['contributions']) for cont in stats)
-            projects[s.replace('?','/')] = contributions
-    with open('aggregated_stats.json', 'w') as f:
-        json.dump(projects, f, indent=2)
+        for contributor in stats:
+            author = contributor['author'] 
+            author = author['login'] if author is not None else None
+            total = contributor['total']
+            bigl = ((i["a"], i["c"], i["d"]) for i in contributor['weeks'])
+            a, c, d = zip(*bigl)
+            a = sum(a)
+            c = sum(c)
+            d = sum(d)
+            proj.append(dict(author=author, total=total, a=a, c=c, d=d))
+        projects.append({'project':s.replace('?','/'), 'contributors':proj})
+
+    with open('aggregated_stats2.json', 'w') as f:
+        json.dump(projects, f, indent=4)
+
+if __name__ == '__main__': parse_stats()
