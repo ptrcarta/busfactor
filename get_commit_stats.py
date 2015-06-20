@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 import os
 import time
 import requests
@@ -18,8 +19,17 @@ for sf in search_files:
 
 done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir('repos_stats')))
 
+print("total", len(repos))
+print("done", len(done_repos))
+
 for repo in repos - done_repos:
     r = requests.get(STATS_URL.format(fullname=repo[0]))
+    if r.status_code == 403:
+        reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
+        now = datetime.now()
+        wait_delay = (reset_time - now).total_seconds()
+        print("sleep", wait_delay)
+        time.sleep(wait_delay)
     if r.status_code == 202:
         time.sleep(6)
         r = requests.get(STATS_URL.format(fullname=repo[0]))
@@ -27,8 +37,8 @@ for repo in repos - done_repos:
         print(repo[0])
         with open("repos_stats/"+repo[0].replace('/','?'), 'w') as f:
             f.write(r.text)
-        time.sleep(6)
     else:
         print(r.status_code)
         print(r.headers)
         print(r.content)
+    time.sleep(6)
