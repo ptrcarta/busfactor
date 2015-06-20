@@ -18,10 +18,11 @@ def load_search_result(results_dir):
     for sf in search_files:
         with open(results_dir+sf) as f:
             search_res = json.load(f)
-        repos_list.extend(search_res['items'])
-    return repos_list
+        for i in search_res['items']:
+            yield i
 
 def load_stats_files(repo):
+    repo = repo.replace("/", "?")
     cont_file = STATS_DIR + repo
     lw_file = STATS_DIR + LW_STATS_DIR + repo
     with open(cont_file) as f:
