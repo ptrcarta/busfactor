@@ -1,38 +1,34 @@
-STARS_DIR = 'popular_repos/'
-LW_STARS_DIR = 'linewise/'
-STARS_FILENAME = "most_starred_{page}.json"
-
-STATS_DIR = "repos_stats/"
-
 import api
+import database
 import json
 from datetime import datetime
 import os
 import time
 
+STARS_DIR = 'popular_repos/'
 
-def get_repos_stats():
-    search_files = os.listdir(STARS_DIR)
+LW_STATS_DIR = 'linewise/'
+STATS_DIR = "repos_stats/"
+
+
+def load_search_result(results_dir):
+    search_files = os.listdir(results_dir)
     search_files = list(zip(*sorted(map(lambda x: (int(x.split('_')[-1].split('.')[0]), x), search_files))))[1]
-
-    repos = set()
+    repos_list = []
     for sf in search_files:
-        with open(STARS_DIR+sf) as f:
+        with open(rusults_dir+sf) as f:
             search_res = json.load(f)
-            for r in search_res['items']:
-                repos.add(r['full_name'])
+        repos_list.extend(search_res['items'])
 
-    done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STATS_DIR)))
-    lw_done_repos = set(map(lambda x: x.replace('?', '/'), os.listdir(STATS_DIR+LW_STATS_DIR)))
+def load_stats_files(repo):
+    cont_file = STATS_DIR + repo
+    lw_file = STATS_DIR + LW_STATS_DIR + repo
+    with open(cont_file) as f:
+        contributors = json.load(f)
+    with open(lw_file) as f:
+        lw_contributors = json.load(f)
+    return {'contributors':contributors, 'linewise':lw_contributors}
 
-    print("total", len(repos))
-    print("done", len(done_repos))
-
-    for repo in repos - done_repos:
-        download_contributors_stats(repo)
-
-    for repo in repos - lw_done_repos:
-        download_linewise_stats(repo)
 
 def parse_stats():
     stats_files = os.listdir(STATS_DIR)
@@ -44,5 +40,3 @@ def parse_stats():
             projects[s.replace('?','/')] = contributions
     with open('aggregated_stats.json', 'w') as f:
         json.dump(projects, f, indent=2)
-
-if __name__ == '__main__': get_repos_stats()
