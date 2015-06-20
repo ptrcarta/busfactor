@@ -3,7 +3,7 @@ import os
 import time
 import requests
 
-STATS_URL = "https://api.github.com/repos/{fullname}/stats/contributors"
+STATS_URL = "https://api.github.com/repos/{fullname}/contributors"
 
 search_files = os.listdir('popular_repos')
 search_files = list(zip(*sorted(map(lambda x: (int(x.split('_')[-1].split('.')[0]), x), search_files))))[1]
