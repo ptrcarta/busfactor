@@ -1,4 +1,5 @@
 import json
+import config
 from datetime import datetime
 import os
 import time
@@ -23,7 +24,9 @@ print("total", len(repos))
 print("done", len(done_repos))
 
 for repo in repos - done_repos:
-    r = requests.get(STATS_URL.format(fullname=repo[0]))
+    print(repos)
+    break
+    r = requests.get(STATS_URL.format(fullname=repo))
     if r.status_code == 403:
         reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
         now = datetime.now()
@@ -31,14 +34,15 @@ for repo in repos - done_repos:
         print("sleep", wait_delay)
         time.sleep(wait_delay)
     if r.status_code == 202:
-        time.sleep(6)
-        r = requests.get(STATS_URL.format(fullname=repo[0]))
+        time.sleep(1)
+        r = requests.get(STATS_URL.format(fullname=repo))
     if r.status_code == 200:
         print(repo[0])
-        with open("repos_stats/"+repo[0].replace('/','?'), 'w') as f:
+        with open("repos_stats/"+repo.replace('/','?'), 'w') as f:
             f.write(r.text)
     else:
+        print(STATS_URL.format(fullname=repo))
         print(r.status_code)
         print(r.headers)
         print(r.content)
-    time.sleep(6)
+    time.sleep(1)
