@@ -26,7 +26,7 @@ print("done", len(done_repos))
 for repo in repos - done_repos:
     print(repos)
     break
-    r = requests.get(STATS_URL.format(fullname=repo))
+    r = requests.get(STATS_URL.format(fullname=repo), auth=(config.github_username, config.github_password))
     if r.status_code == 403:
         reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
         now = datetime.now()
@@ -35,7 +35,7 @@ for repo in repos - done_repos:
         time.sleep(wait_delay)
     if r.status_code == 202:
         time.sleep(1)
-        r = requests.get(STATS_URL.format(fullname=repo))
+        r = requests.get(STATS_URL.format(fullname=repo), auth=(config.github_username, config.github_password))
     if r.status_code == 200:
         print(repo[0])
         with open("repos_stats/"+repo.replace('/','?'), 'w') as f:
