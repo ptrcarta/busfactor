@@ -62,7 +62,7 @@ def get_repos_stats():
             r = get_request(STATS_URL.format(fullname=repo))
 
         if r.status_code == 200:
-            print(repo[0])
+            print(repo)
             with open(STATS_DIR+repo.replace('/','?'), 'w') as f:
                 f.write(r.text)
         elif r.status_code == 403:
