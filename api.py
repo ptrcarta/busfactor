@@ -12,21 +12,18 @@ def _request(url):
     return requests.get(url, auth=(config.github_username, config.github_password))
 
 
-def _get(url, items_q, list_node=None):
+def _get(url, callback, **kwargs):
     logger.info("querying API on url: %s" %url)
     r = _request(url)
     while r.status_code == 202:
         time.sleep(1)
         r = _request(url)
     if r.status_code == 200:
-        if list_node:
-            items_q.extend(r.json[list_node])
-        else:
-            items_q.extend(r.json)
+        callback(r, kwargs)
         time.sleep(1)
         if 'links' in r.headers:
             if 'next' in r.links:
-                _get(r.links['next']['url'], items_q)
+                _get(r.links['next']['url'], callback, kwargs)
 
     elif r.status_code == 403:
         reset_time = datetime.fromtimestamp(int(r.headers['X-RateLimit-Reset']))
@@ -42,20 +39,26 @@ def _get(url, items_q, list_node=None):
             r.content))
         time.sleep(1)
 
+def _append_contributors(response, items_q):
+    items_q.extend(response.json)
+
+def _append_searchresult(response, items_q):
+    items_q.extend(response.json['items'])
+
 def contributors_stats(repo):
     contributors_list = []
     url = STATS_URL.format(fullname=repo)
-    _get(url, contributors_list)
+    _get(url, _append_contributors, items_q=contributors_list)
     return contributors_list
 
 def linewise_stats(repo):
     lw_list = []
     url = STATS_URL.format(fullname=repo)
-    _get(url, lw_list)
+    _get(url, _append_contributors, items_q=lw_list)
     return lw_list
 
 def repos_list(min_stars=1000):
     repos_list = []
     url = STARS_SEARCH_URL.format(min_stars=min_stars)
-    _get(url, repos_list, list_node='items')
+    _get(url, _append_searchresult, items_q=repos_list)
     return repos_list
