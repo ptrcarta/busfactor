@@ -77,4 +77,15 @@ def get_repos_stats():
             print(r.content)
         time.sleep(1)
 
-if __name__ == '__main__': get_repos_stats()
+def parse_stats():
+    stats_files = os.listdir(STATS_DIR)
+    projects = dict()
+    for s in stats_files:
+        with open(s) as f:
+            stats = json.load(f)
+            contributions = dict((cont['login'], cont['contributions']) for cont in stats)
+            projects[s.replace('?','/')] = contributions
+    with open('aggregated_stats.json', 'w') as f:
+        json.dump(projects, f, indent=2)
+
+if __name__ == '__main__': parse_stats()
