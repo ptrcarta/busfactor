@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 import os
 import time
+import pandas as pd
 
 STARS_DIR = 'popular_repos/'
 
@@ -33,6 +34,9 @@ def load_stats_files(repo):
 
 
 def parse_stats():
+    """parse the linewise results and create a single json out of them"""
+
+    """very slow because of json decoding / file reading"""
     stats_files = os.listdir(STATS_DIR+LW_STATS_DIR)
     projects = []
     for s in stats_files:
@@ -53,5 +57,13 @@ def parse_stats():
 
     with open('aggregated_stats2.json', 'w') as f:
         json.dump(projects, f, indent=4)
+
+def get_stats_dataframes()
+    with open('aggregated_stats2.json', 'w') as f:
+        stats = json.load(f)
+    projects = dict()
+    for s in stats:
+        projects[s['project']] = pd.Dataframe(s['contributors'])
+    return projects
 
 if __name__ == '__main__': parse_stats()
