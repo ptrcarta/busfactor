@@ -16,7 +16,6 @@ login TEXT NOT NULL,
 adds INTEGER,
 deletes INTEGER,
 commits INTEGER,
-contributions INTEGER
 FOREIGN KEY (project_id) REFERENCES project(id)
 );
 """
