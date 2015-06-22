@@ -58,20 +58,23 @@ def parse_stats():
     with open('aggregated_stats2.json', 'w') as f:
         json.dump(projects, f, indent=4)
 
-def get_stats_dataframes()
-    with open('aggregated_stats2.json', 'w') as f:
+def get_stats_dataframes():
+    with open('aggregated_stats2.json') as f:
         stats = json.load(f)
     projects = dict()
     for s in stats:
-        projects[s['project']] = pd.Dataframe(s['contributors'])
+        if len(s['contributors']) > 0:
+            projects[s['project']] = pd.DataFrame(s['contributors'])
     return projects
 
-if __name__ == '__main__':
+def elaborate_api_results():
     params = (0.05,0.05,0.5)
     df_dict = get_stats_dataframes()
     filtered_projects = dict()
     for proj in df_dict:
-        df = df_dict[proj].set_index('author', inplace=True).reindex_axis(['c','a','d'], axis=1)
+        df = df_dict[proj].set_index('author').reindex_axis(['c','a','d'], axis=1)
         contribution_ratio = df/df.sum()
-        main_contributors = contribution_ratio.select(lambda l: (contribution_ratiocontribution_ratio.loc[l] > params).any())
-        filtered_projects[proj] = main_contributors
+        main_contributors = contribution_ratio.select(lambda l: (contribution_ratio.loc[l] > params).any())
+    dataframe_to_db(main_contributors, proj)
+
+if __name__ == '__main__': pass
