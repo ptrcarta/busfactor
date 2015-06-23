@@ -75,6 +75,7 @@ def elaborate_api_results():
         df = df_dict[proj].set_index('author').reindex_axis(['c','a','d'], axis=1)
         contribution_ratio = df/df.sum()
         main_contributors = contribution_ratio.select(lambda l: (contribution_ratio.loc[l] > params).any())
-    dataframe_to_db(main_contributors, proj)
+        print (proj)
+        database.dataframe_to_db(main_contributors, proj)
 
-if __name__ == '__main__': pass
+if __name__ == '__main__': elaborate_api_results()
