@@ -55,11 +55,11 @@ def parse_stats():
             proj.append(dict(author=author, total=total, a=a, c=c, d=d))
         projects.append({'project':s.replace('?','/'), 'contributors':proj})
 
-    with open('aggregated_stats2.json', 'w') as f:
+    with open('aggregated_stats.json', 'w') as f:
         json.dump(projects, f, indent=4)
 
 def get_stats_dataframes():
-    with open('aggregated_stats2.json') as f:
+    with open('aggregated_stats.json') as f:
         stats = json.load(f)
     projects = dict()
     for s in stats:
