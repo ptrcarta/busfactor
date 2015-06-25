@@ -1,0 +1,151 @@
+/**
+ * custom */
+
+/* this is bullshit */
+.container {
+    width: 100% !important;
+}
+.columns {
+    margin: 0 !important;
+}
+/* ... */
+html,body {
+    min-height: 100vh;
+    height: 100%;
+    position: relative;
+}
+html {
+    background-image: url('landing.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 0 50px;
+}
+body, main .column {
+    background: rgba(255,255,255,0.7);
+}
+.bf-header {
+    background: #f5f5f5;
+    padding: 10px 10px 6px;
+    width: 100%;
+    border-bottom: 1px #e5e5e5 solid; 
+}
+.bf-header a {
+    color: #333;
+    font-weight: bold;
+}
+.bf-header a:hover {
+    color: #4078c0;
+    text-decoration: none;
+}
+
+#logo {
+    font-size: 27px;
+    line-height: 1.1;
+}
+
+.bf-header form {
+    display: inline-block;
+    width: calc(100% - 50px);
+    vertical-align: middle;
+    margin-top: -10px;
+    margin-left: 5px;
+}
+.bf-header form input {
+    min-height: 30px !important;
+    line-height: 1 !important;
+}
+
+.bf-header nav {
+    vertical-align: middle;
+    padding: 10px;
+}
+.bf-header nav:first-child {
+    float: left;
+}
+.bf-header nav:last-child {
+    float: right;
+}
+
+.bf-header nav a:not(:last-child) {
+    margin-right: 1em;
+}
+
+main {
+    padding: 0 55px;
+}
+
+footer {
+    border-top: 1px #e5e5e5 solid;
+    padding: 40px 15px 0px;
+    color: #767676;
+    font-size: 12px;
+}
+footer * {
+    vertical-align: middle;
+}
+footer > * {
+    height: 100%;
+}
+
+.center {
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+
+article {
+    border: 1px solid #e5e5e5;
+    border-radius: 0.25rem 0.25rem 0 0;
+    margin-bottom: 20px;
+}
+
+article header {
+    padding: 10px;
+}
+
+article header a,
+article header i {
+    font-size: 21px;
+}
+
+.bf-graph {
+    width: 100%;
+    display: flex;
+}
+.bf-graph span {
+    flex: 0 1 auto;
+    display: inline-block;
+    height: 21px;
+    cursor: pointer;
+    will-change: box-shadow;
+    transition: box-shadow 125ms ease-in-out;
+}
+
+.bf-contributors {
+    padding: 10px;
+    font-size: 21px;
+    display: block;
+    text-align: center;
+    color: #999;
+}
+.bf-info {
+    padding: 10px 10%;
+}
+.bf-info * {
+    background: #fff;
+    color: #333;
+}
+.bf-info h2 {
+    margin: 3px 0 0 35px
+}
+.bf-info ul {
+    list-style: none;
+    clear: both;
+    margin: 10px;
+    padding: 10px;
+}
+.gone { display: none; }
+.glow {
+    box-shadow: 0 0 5px 5px;
+}
