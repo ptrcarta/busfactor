@@ -1,14 +1,15 @@
 <!doctype html>
+<!-- Courtesy of Tso -->
 <html>
     <head>
         {% block head %}
         <meta charset="utf-8">
-        <title>{% block title %}Busfactor{% end block %}</title>
+        <title>{% block title %}Busfactor{% endblock %}</title>
 <!--        <script src="http://127.0.0.1:9001/js/socket.js"></script>-->
         <link rel="stylesheet" href="{{ url_for('static', filename='primer.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='octicons.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
-        {% end block %}
+        {% endblock %}
     </head>
     <body class="container">
         <header class="columns bf-header">
@@ -16,7 +17,7 @@
             <div class="column one-half">
                 <a id="logo" href="/"><i class="mega-octicon octicon-mark-github"></i></a>
             <form>
-                <input class="input-block" type="text" placeholder="Search... {% block placeholder %}{% end block %}">
+                <input class="input-block" type="text" placeholder="Search... {% block placeholder %}{% endblock %}">
             </form>
             </div>
             <div class="column one-half">
@@ -29,11 +30,11 @@
                     <a href="#" class="tooltipped tooltipped-sw" aria-label="Calculate Your Bus Factor!"><i class="octicon octicon-plus"></i></a>
                 </nav>
             </div>
-            {% end block %}
+            {% endblock %}
         </header>
         <main>
             {% block content %}
-            {% end block %}
+            {% endblock %}
         </main>
         <footer class="columns">
             {% block footer %}
@@ -59,8 +60,8 @@
                 &emsp;<a href="#">To</a>
                 &emsp;<a href="#">Us</a>
             </div>
-            {% end block %}
+            {% endblock %}
         </footer>
-        <script src="{{ url_for('static', filename='js/script.js) }}">
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </body>
 </html>
