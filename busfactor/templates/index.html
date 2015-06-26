@@ -1,75 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 <!-- thank you wonderful tso -->
-            <div style="margin-top: 1em;"></div>
-            <div class="columns">
-                <div class="column one-third">
-                    <nav class="menu">
-                      <span class="menu-heading"><i class=" octicon octicon-repo"></i> Browse Repos With</span>
-                      <a class="menu-item selected" href="#">
-                        <span class="octicon octicon-pulse"></span>
-                        Highest Bus Factor
-                      </a>
-                      <a class="menu-item" href="#">
-                        <span class="octicon octicon-star"></span>
-                        Popularity
-                      </a>
-                    
-                      <span class="menu-heading"><i class=" octicon octicon-person"></i> Browse Contributors With</span>
-                      <a class="menu-item" href="#">
-                        <span class="octicon octicon-flame"></span>
-                        Highest Bus Factor
-                      </a>
-                      <a class="menu-item" href="#">
-                        <span class="octicon octicon-rocket"></span>
-                        Most # of Repos
-                      </a>
-                    
-                      <span class="menu-heading"><i class="octicon octicon-gear"></i> Actions</span>
-                      <a class="menu-item" href="#">
-                        <span class="octicon octicon-keyboard"></span>
-                        Calculate Your Bus Factor
-                      </a>
-                      <a class="menu-item" href="#">
-                        <span class="octicon octicon-mark-github"></span>
-                        <span class="counter">69</span>
-                        Fork me on Github
-                      </a>
-                    </nav>
-                </div>
                 <div class="column two-thirds" style="background: #fff">
                     <h1>Github Repos with Highest Bus Factor</h1>
                     <h3 style="font-weight: normal">&ldquo;if you were to get hit by a bus tomorrow...&rdquo;</h3>
             <hr>
+            {% for project in projects %}
             <article>
                 <header>
                     <i class="octicon octicon-repo"></i> 
-                    <a href="#">gogits</a> / <a href="#">gogs</a>
+                    <a href="#">{{ project.owner }}</a> / <a href="#">{{ project.name }}</a>
                     <span class="state state-closed right tooltipped tooltipped-w" 
-                          aria-label="High Bus Factor!"> 90.9% </span>
+                          aria-label="High Bus Factor!">{{ project.factor }}</span>
                 </header>
                 <section>
-                    <span class="bf-contributors tooltipped tooltipped-s" aria-label="193 Contributors">
-                        <i class="mega-octicon octicon-organization"></i> 119 Contributors
+                    <span class="bf-contributors tooltipped tooltipped-s" aria-label="{{ project.contributors_num }} Contributors">
+                        <i class="mega-octicon octicon-organization"></i> {{ project.contributors_num }} Contributors
                     </span>
                     <div class="bf-graph" data-repo="gogs">
-                        <span style="background-color: #8fb56a; width: 85%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 85%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 1%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 1%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 1%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 1%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 1%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 1%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 1%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 1%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 1%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 1%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 1%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 1%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 1%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 1%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 1%">&nbsp;</span>
+                        {% for contributor in project.contributors %}
+                        <!-- scale color, reuse that one I made -->
+                        <span style="background-color: #8fb56a; width: {{ contributor.percentage }}%" class="tooltipped tooltipped-n" aria-label="{{ contributor.login }} - {{ contributor.percentage }}%">&nbsp;</span>
+                        {% endfor %}
                     </div>
+                    <!-- make one of these for each contributor -->
                     <div class="bf-info gone">
                         <img class="avatar avatar-small left" src="https://avatars3.githubusercontent.com/u/9919?v=3&s=32" width="32" height="32">
                         <h2 id="gogs">some shitty example don't worry about it</h2>
@@ -83,101 +37,12 @@
                     </div>
                 </section> 
             </article>
-            <article>
-                <header>
-                    <i class="octicon octicon-repo"></i> 
-                    <a href="#">fish-shell</a> / <a href="#">fish-shell</a>
-                    <span class="state state-merged right tooltipped tooltipped-w" 
-                          aria-label="Medium Bus Factor"> 22.9% </span>
-                </header>
-                <section>
-                    <span class="bf-contributors tooltipped tooltipped-s" aria-label="193 Contributors">
-                        <i class="mega-octicon octicon-organization"></i> 193 Contributors
-                    </span>
-                    <div class="bf-graph" data-repo="fish">
-                        <span style="background-color: #8fb56a; width: 15%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 15%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 25%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 25%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 1%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 1%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 1%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 1%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 1%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 1%">&nbsp;</span>
-                    </div>
-                    <div class="bf-info gone">
-                        <img class="avatar avatar-small left" src="https://avatars3.githubusercontent.com/u/9919?v=3&s=32" width="32" height="32">
-                        <h2 id="fish">some shitty example don't worry about it</h2>
-                        <ul>
-                            <li>51 commits</li>
-                            <li>Longest streak: 69 days</li>
-                            <li>other stuff about this person</li>
-                            <li>idk</li>
-                        </ul>
-                        <button>Close this shit</button>
-                    </div>
-                </section> 
-            </article>
-            <article>
-                <header>
-                    <i class="octicon octicon-repo"></i> 
-                    <a href="#">ipfs</a> / <a href="#">go-ipfs</a>
-                    <span class="state state-open right tooltipped tooltipped-w" 
-                          aria-label="Low Bus Factor"> &lt; 1% </span>
-                </header>
-                <section>
-                    <span class="bf-contributors tooltipped tooltipped-s" aria-label="53 Contributors">
-                        <i class="mega-octicon octicon-organization"></i> 53 Contributors
-                    </span>
-                    <div class="bf-graph" data-repo="ipfs">
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                        <span style="background-color: #8fb56a; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson1 - 5%">&nbsp;</span>
-                        <span style="background-color: #5b8436; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson2 - 5%">&nbsp;</span>
-                        <span style="background-color: #06373c; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson3 - 5%">&nbsp;</span>
-                        <span style="background-color: #ffd500; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson4 - 5%">&nbsp;</span>
-                        <span style="background-color: #353535; width: 5%" class="tooltipped tooltipped-n" aria-label="Randomperson5 - 5%">&nbsp;</span>
-                    </div>
-                    <div class="bf-info gone">
-                        <img class="avatar avatar-small left" src="https://avatars3.githubusercontent.com/u/9919?v=3&s=32" width="32" height="32">
-                        <h2 id="ipfs">some shitty example don't worry about it</h2>
-                        <ul>
-                            <li>51 commits</li>
-                            <li>Longest streak: 69 days</li>
-                            <li>other stuff about this person</li>
-                            <li>idk</li>
-                        </ul>
-                        <button>Close this shit</button>
-                    </div>
-                </section> 
-            </article>
-
+            {% endfor %}
             </div>
 </div>
             <hr>
             <div class="btn-group" style="display: block; margin: 20px auto; width: 20%" >
+                <!-- next pages -->
                   <button class="btn" type="button">1</button>
                   <button class="btn btn-outline" type="button">2</button>
                   <button class="btn" type="button">3</button>
