@@ -1,4 +1,17 @@
 from flask import render_template
+from random import random
+import colorsys as cs
+
+def rgb_to_web(c):
+    """[0,1) rgb tuple to web colorcode"""
+    scaled = map(lambda x: round(x*255), c)
+    return "#" + "%02x"*3 % tuple(scaled)
+
+def get_color(c):
+    #scale the logistic function properly
+    #f =  lambda x :logistic.cdf(x*8)
+    return cs.hsv_to_rgb((f(c))*3.4/10, 1, 1- 0.2*random(1)[0])
+
 
 test_projects = [
         {'name':'gogs',

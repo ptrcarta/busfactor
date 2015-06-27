@@ -20,7 +20,7 @@
                     <div class="bf-graph" data-repo="gogs">
                         {% for contributor in project.contributors %}
                         <!-- scale color, reuse that one I made -->
-                        <span style="background-color: #8fb56a; width: {{ contributor.percentage }}%" class="tooltipped tooltipped-n" aria-label="{{ contributor.login }} - {{ contributor.percentage }}%">&nbsp;</span>
+                        <span style="background-color: {{ pct_color(contributor.percentage) }}; width: {{ contributor.percentage }}%" class="tooltipped tooltipped-n" aria-label="{{ contributor.login }} - {{ contributor.percentage }}%">&nbsp;</span>
                         {% endfor %}
                     </div>
                     <!-- make one of these for each contributor -->
